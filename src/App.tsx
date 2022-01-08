@@ -5,9 +5,15 @@ import { v1 } from 'uuid';
 
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
+export type TodolistsType = {
+    id: string
+    title: string
+    filter: FilterValuesType
+}
 
 const App = () => {
 
+/*
     let [filter, setFilter] = useState<FilterValuesType>('all')
 
     let [tasks, setTasks] = useState([
@@ -17,38 +23,76 @@ const App = () => {
         {id: v1(), title: "restIP", isDone: true},
         {id: v1(), title: "graphQL", isDone: false},
     ])
+*/
 
-    const removeTask = (id: string) => {
-        let newTask = tasks.filter(t => t.id !== id)
-        setTasks(newTask)
+    let todolistID1=v1();
+    let todolistID2=v1();
+
+    let [todolists, setTodolists] = useState<Array<TodolistsType>>([
+        {id: todolistID1, title: 'What to learn', filter: 'all'},
+        {id: todolistID2, title: 'What to buy', filter: 'all'},
+    ])
+
+    let [tasks, setTasks] = useState({
+        [todolistID1]:[
+            {id: v1(), title: "HTML&CSS", isDone: true},
+            {id: v1(), title: "JS", isDone: true},
+            {id: v1(), title: "ReactJS", isDone: false},
+            {id: v1(), title: "Rest API", isDone: false},
+            {id: v1(), title: "GraphQL", isDone: false},
+        ],
+        [todolistID2]:[
+            {id: v1(), title: "HTML&CSS2", isDone: true},
+            {id: v1(), title: "JS2", isDone: true},
+            {id: v1(), title: "ReactJS2", isDone: false},
+            {id: v1(), title: "Rest API2", isDone: false},
+            {id: v1(), title: "GraphQL2", isDone: false},
+        ]
+    });
+
+    const removeTask = (todolistID: string ,id: string) => {
+        setTasks({...tasks, [todolistID]:tasks[todolistID].filter( f => f.id !== id )})
     }
-    const addTask = (title:string) => {
-        let task = {id: v1(), title: title, isDone: true }
-        let newTask = [task, ...tasks]
-        setTasks(newTask)
+    const addTask = (todolistID: string ,title:string) => {
+        let newTask = {id: v1(), title: title, isDone: false }
+        setTasks({...tasks, [todolistID]:[newTask,...tasks[todolistID]]})
     }
-
-    let tasksForTodolist = tasks
-
-    if (filter === 'active')
-        tasksForTodolist = tasks.filter(t => t.isDone === false)
-    if (filter === 'completed')
-        tasksForTodolist = tasks.filter(t => t.isDone === true)
-
-    const changeTasks = (value: FilterValuesType) => {
-        setFilter(value)
+    const changeTasks = (todolistID: string, value: FilterValuesType) => {
+        setTodolists(todolists.map( m => m.id === todolistID? {...m, filter:value}: m ))
+    }
+    const changeStatus = (todolistID: string, taskId: string, isDone: boolean) => {
+        setTasks({...tasks, [todolistID]:tasks[todolistID].map( m => m.id === taskId? {...m, isDone}: m )})
+    }
+    const removeTodolist = (todolistID: string) => {
+        setTodolists(todolists.filter( f => f.id !== todolistID ))
+        delete tasks[todolistID]
+        console.log(tasks)
     }
 
     return (
         <div className="App">
-          <TodoList
-              title="What to learn"
-              tasks={tasksForTodolist}
-              removeTask={removeTask}
-              changeTasks={changeTasks}
-              addTask={addTask}
+            {todolists.map( m => {
+                let tasksForTodolist = tasks[m.id]
+                if (m.filter === 'active')
+                    tasksForTodolist = tasks[m.id].filter(t => t.isDone === false)
+                if (m.filter === 'completed')
+                    tasksForTodolist = tasks[m.id].filter(t => t.isDone === true)
+                return (
+                    <TodoList
+                        title={m.title}
+                        tasks={tasksForTodolist}
+                        removeTask={removeTask}
+                        changeTasks={changeTasks}
+                        addTask={addTask}
+                        todolistID={m.id}
+                        filter={m.filter}
+                        changeTaskStatus={changeStatus}
+                        removeTodolist={removeTodolist}
 
-          />
+                    />
+                )
+            } )}
+
         </div>
     );
 }
