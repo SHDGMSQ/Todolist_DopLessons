@@ -52,7 +52,6 @@ function TodoList(props: PropsType) {
             <ul>
                 {
                     props.tasks.map(t => {
-
                         return <li key={t.id}
                                    className={t.isDone ? 'is-done' : ''}>
                             <input onChange={(e: ChangeEvent<HTMLInputElement>) => onChangeHandler(t.id, e)}
@@ -66,8 +65,6 @@ function TodoList(props: PropsType) {
                             </button>
 
                         </li>
-
-
                     })
                 }
             </ul>

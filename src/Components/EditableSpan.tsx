@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 
 type EditableSpanPropsType = {
     title: string
@@ -18,15 +18,20 @@ export const EditableSpan = (props: EditableSpanPropsType) => {
         props.onChange(title)
     }
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
-
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.charCode === 13) {
+            setEdit(true)
+            props.onChange(title)
+        }
+    }
     return edit
         ? <span onDoubleClick={onDoubleClickHandler}>{props.title}</span>
         : <input value={title}
                  onBlur={onBlurHandler}
                  autoFocus
-                onChange={onChangeHandler}
+                 onChange={onChangeHandler}
+                 onKeyPress={onKeyPressHandler}
         />
-
 
 
 }
