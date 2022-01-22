@@ -1,4 +1,6 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import React, {ChangeEvent, KeyboardEvent, useReducer, useState} from "react";
+import {EditReducer, onBlurHandlerAC, onDoubleClickEditAC, onKeyPressEditAC} from "../Reducers/EditReducer";
+import {onChangeTitleAC, onDoubleClickTitleAC, TitleEditableSpanReducer} from "../Reducers/TitleEditableSpanReducer";
 
 type EditableSpanPropsType = {
     title: string
@@ -6,21 +8,25 @@ type EditableSpanPropsType = {
 }
 
 export const EditableSpan = (props: EditableSpanPropsType) => {
-    const [edit, setEdit] = useState(true)
-    const [title, setTitle] = useState('')
+    const [edit, editDispatch] = useReducer(EditReducer, true)
+    const [title, titleDispatch] = useReducer(TitleEditableSpanReducer, '')
 
     const onDoubleClickHandler = () => {
-        setTitle(props.title)
-        setEdit(false)
+        //setTitle(props.title)
+        titleDispatch(onDoubleClickTitleAC(props.title))
+        editDispatch(onDoubleClickEditAC())
     }
     const onBlurHandler = () => {
-        setEdit(true)
+        editDispatch(onBlurHandlerAC())
         props.onChange(title)
     }
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        //setTitle(e.currentTarget.value)
+        titleDispatch(onChangeTitleAC(e.currentTarget.value))
+    }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.charCode === 13) {
-            setEdit(true)
+            editDispatch(onKeyPressEditAC())
             props.onChange(title)
         }
     }

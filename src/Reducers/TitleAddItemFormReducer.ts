@@ -3,7 +3,7 @@ import {ChangeEvent} from "react";
 export const TitleAddItemFormReducer = (state: string, action: GeneralType) => {
     switch (action.type) {
         case 'ON-CHANGE-INPUT-TITLE': {
-            return action.preload.e.currentTarget.value
+            return action.preload.newTitle
         }
         case "ADD-TASK-TITLE": {
             return ''
@@ -16,11 +16,11 @@ type GeneralType = onChangeInputTitleAC
 | addTaskTitleACType
 
 type onChangeInputTitleAC = ReturnType<typeof onChangeInputTitleAC>
-export const onChangeInputTitleAC = (e: ChangeEvent<HTMLInputElement>) => {
+export const onChangeInputTitleAC = (newTitle: string) => {
     return {
         type: 'ON-CHANGE-INPUT-TITLE',
         preload: {
-            e
+            newTitle
         }
     } as const
 }

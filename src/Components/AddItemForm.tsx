@@ -13,8 +13,9 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
     const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
         //setError(null)
         //setTitle(e.currentTarget.value)
+        const newTitle: string = e.currentTarget.value
         errorDispatch(onChangeInputErrorAC())
-        titleDispatch(onChangeInputTitleAC(e))
+        titleDispatch(onChangeInputTitleAC(newTitle))
     }
     const enterInput = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter")
