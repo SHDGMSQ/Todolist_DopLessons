@@ -29,6 +29,7 @@ export type TodolistsType = {
 
 const App = () => {
 
+    //init commit
 /*
     let [filter, setFilter] = useState<FilterValuesType>('all')
 
