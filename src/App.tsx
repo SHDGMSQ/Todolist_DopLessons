@@ -29,18 +29,7 @@ export type TodolistsType = {
 
 const App = () => {
 
-    //init commit
-/*
-    let [filter, setFilter] = useState<FilterValuesType>('all')
-
-    let [tasks, setTasks] = useState([
-        {id: v1(), title: "HTML&CSS", isDone: true},
-        {id: v1(), title: "JS", isDone: true},
-        {id: v1(), title: "REACTJS", isDone: false},
-        {id: v1(), title: "restIP", isDone: true},
-        {id: v1(), title: "graphQL", isDone: false},
-    ])
-*/
+//new init commit
 
     let todolistID1=v1();
     let todolistID2=v1();
